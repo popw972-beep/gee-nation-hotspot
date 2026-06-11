@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  ipAddress String?
+  macAddress String?
+  plan      String
+  status    String   @default("Active")
+  dataUsed  String   @default("0 MB")
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Voucher {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  plan      String
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Transaction {
+  id                Int      @id @default(autoincrement())
+  merchantRequestId String   @unique
+  checkoutRequestId String   @unique
+  phoneNumber       String
+  amount            Float
+  status            String
+  mpesaReceipt      String?
+  createdAt         DateTime @default(now())
+}
